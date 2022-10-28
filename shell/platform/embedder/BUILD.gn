@@ -100,6 +100,11 @@ template("embedder_source_set") {
       ]
     }
 
+    # modify by mijia
+    if (is_android) {
+      sources += [ "$root_build_dir/flutter_icu/android/icudtl.o" ]
+    }
+
     deps = [
       ":embedder_gpu_configuration",
       "//flutter/assets",
@@ -373,7 +378,9 @@ if (enable_unittests) {
 }
 
 shared_library("flutter_engine_library") {
-  visibility = [ ":*" ]
+  # modify by mijia
+  # visibility = [ ":*" ]
+  # modify end
 
   output_name = "flutter_engine"
 
@@ -385,13 +392,21 @@ shared_library("flutter_engine_library") {
     ldflags += [ "-Wl,--version-script=" + rebase_path("embedder_exports.lst") ]
   }
 
+  # modify by mijia
+  if (is_android) {
+    ldflags += [ "-Wl,--version-script=" + rebase_path(
+                     "//flutter/shell/platform/android/android_exports.lst") ]
+  }
+
   deps = [ ":embedder" ]
 
   public_configs = [ "//flutter:config" ]
 }
 
 copy("copy_headers") {
-  visibility = [ ":*" ]
+  # modify by mijia
+  # visibility = [ ":*" ]
+  # modify end
   sources = [ "embedder.h" ]
   outputs = [ "$root_out_dir/flutter_embedder.h" ]
 }

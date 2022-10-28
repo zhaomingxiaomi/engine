@@ -51,22 +51,27 @@ group("flutter") {
 
   # Compile the engine.
   public_deps = [
-    ":unittests",
-    "//flutter/shell/platform/embedder:flutter_engine",
-    "//flutter/sky",
+    # modify by mijia
+    # change to build android_embedder
+    # ":unittests",
+    # "//flutter/shell/platform/embedder:flutter_engine",
+    # "//flutter/sky",
+    "//flutter/examples/android_embedder",
   ]
 
   # Ensure the example for a sample embedder compiles.
-  if (build_embedder_examples) {
-    public_deps += [
-      "//flutter/examples/glfw",
-      "//flutter/examples/vulkan_glfw",
-    ]
+  # modify by mijia
+  # if (build_embedder_examples) {
+  #   public_deps += [
+  #     "//flutter/examples/glfw",
+  #     "//flutter/examples/vulkan_glfw",
+  #   ]
 
-    if (!is_mac) {
-      public_deps += [ "//flutter/examples/glfw_drm" ]
-    }
-  }
+  #   if (!is_mac) {
+  #     public_deps += [ "//flutter/examples/glfw_drm" ]
+  #   }
+  # }
+  # modify end
 
   # If enabled, compile the SDK / snapshot.
   if (!is_fuchsia) {
@@ -120,15 +125,17 @@ group("flutter") {
     ]
   }
 
-  if ((flutter_runtime_mode == "debug" || flutter_runtime_mode == "profile") &&
-      (is_ios || is_android)) {
-    public_deps += [ "//flutter/testing/scenario_app" ]
-  }
+  # modify by mijia
+  # if ((flutter_runtime_mode == "debug" || flutter_runtime_mode == "profile") &&
+  #     (is_ios || is_android)) {
+  #   public_deps += [ "//flutter/testing/scenario_app" ]
+  # }
 
-  if (is_android && flutter_runtime_mode == "profile" &&
-      current_cpu == "arm64") {
-    public_deps += [ "//flutter/testing/android_background_image" ]
-  }
+  # if (is_android && flutter_runtime_mode == "profile" &&
+  #     current_cpu == "arm64") {
+  #   public_deps += [ "//flutter/testing/android_background_image" ]
+  # }
+  # modify end
 }
 
 group("unittests") {

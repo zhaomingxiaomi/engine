@@ -1,0 +1,37 @@
+import("//build/config/android/config.gni")
+import("//build/toolchain/clang.gni")
+import("//flutter/build/zip_bundle.gni")
+import("//flutter/common/config.gni")
+import("//flutter/shell/config.gni")
+import("//flutter/shell/gpu/gpu.gni")
+import("//flutter/shell/version/version.gni")
+
+action("icudtl_object") {
+  script = "//flutter/sky/tools/objcopy.py"
+
+  icudtl_input = "//third_party/icu/flutter/icudtl.dat"
+  icudtl_output = "$root_build_dir/flutter_icu/android/icudtl.o"
+
+  inputs = [ "$icudtl_input" ]
+
+  outputs = [ "$icudtl_output" ]
+
+  args = [
+    "--objcopy",
+    rebase_path(android_objcopy),
+    "--input",
+    rebase_path(icudtl_input),
+    "--output",
+    rebase_path(icudtl_output),
+    "--arch",
+    current_cpu,
+  ]
+}
+
+group("android_embedder") {
+  public_deps = [
+    ":icudtl_object",
+    "//flutter/shell/platform/embedder:copy_headers",
+    "//flutter/shell/platform/embedder:flutter_engine_library",
+  ]
+}
